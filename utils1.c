@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 16:10:28 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/23 21:08:06 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/25 20:43:16 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ void	check_digits(char **argv)
 		if (ft_strlen(c) == 0)
 			normi_check_digits(j);
 		if (ft_strlen(c) > 1 && c[0] == '-')
-			j++;
+		{
+			printf("Error: list may only contain +ve numbers\n");
+			exit (EXIT_FAILURE);
+		}
 		while (c[j] != '\0')
 		{
 			if (ft_isdigit(c[j]) == 0)
@@ -65,14 +68,13 @@ int	ft_handle_input_errors(int argc, char *argv[])
 
 	return 0;
 }
-int		ft_init_vars(int argc, char *argv[], t_vars *vars)
+int		ft_init_table(int argc, char *argv[], t_table *table)
 {
-	vars->number_of_philosophers = ft_atoi(argv[1]);
-	vars->time_to_die = ft_atoi(argv[2]);
-	vars->time_to_eat = ft_atoi(argv[3]);
-	vars->time_to_sleep = ft_atoi(argv[4]);
-	vars->forks_on_table = vars->number_of_philosophers;
+	table->number_of_philosophers = ft_atoi(argv[1]);
+	table->time_to_die = ft_atoi(argv[2]);
+	table->time_to_eat = ft_atoi(argv[3]);
+	table->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		vars->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
+		table->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
 	return (0);
 }

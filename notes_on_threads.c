@@ -70,6 +70,9 @@ int main(int argc, char *argv[])
 //     return 0;
 // }
 
+//THREADS CAN BE CREATED FROM OTHER THREADS...
+//THREADS IN A LOOP
+
 // int mails = 0;
 // pthread_mutex_t mutex;
 

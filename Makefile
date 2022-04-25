@@ -2,7 +2,7 @@ NAME		=	philo
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror -ggdb3 -pthread -fsanitize=thread
 
-SRC			=	philo_thread.c utils1.c ft_atoi.c
+SRC			=	main.c utils1.c ft_atoi.c
 
 OBJ			=	${SRC:.c=.o}
 
