@@ -1,63 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/23 21:02:52 by Loui :)           #+#    #+#             */
+/*   Updated: 2022/04/25 14:25:55 by Loui :)          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
-#include <unistd.h> //add -pthread link option otherwise this library won't work
+#include <time.h>
 
-int				mails = 0;
-pthread_mutex_t	mutex;
-void	*routine() 
+typedef struct s_philo
 {
-	for (int i = 0; i < 1000000; i++)
-	{
-		pthread_mutex_lock(&mutex);
-		/*check if this has been locked. If locked, other thread can't enter*/
-		mails++;
-		pthread_mutex_unlock(&mutex); /*everything between lock & unlock is performed in correct order*/
-	}
-	
-}
+	int		id;
+	int		status;
+	int		eat_count;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+}	t_philo;
 
-int	main(int argc, char *argv[]) 
+//GOAL: create a program that simulates the behaviour of a philosopher eating and thinking hahaha
+//ATTEMPT #1: PASS THE ID AND STATUS OF PHILOSOPHERS AS A STRUCT
+//A philosopher is represented by a thread. Each philosopher has a unique id & status 
+
+//Philosopher status: 0 - thinking, 1 - eating, 2 - sleeping
+//Philosopher status: 0 - thinking, 1 - eating, 2 - sleeping
+//Philosopher status: 0 - thinking, 1 - eating, 2 - sleeping
+//ID is just the index +1
+
+int	main(int argc, char *argv[])
 {
-    pthread_t thr[4]; //can put this in an array
-	/*api stores info about thread in var of type pthread_t. 
-	One for each thread can put that variable inside a struct */
-	pthread_mutex_init(&mutex, NULL);
-		//arg0 = address of mutex var
-	int i;
-	//if you call pthread_create and _join in the same loop,
-	//the threads will execute consecutavly -- not the goal!!
-	for (i=0; i < 4; i++)
-	{
-		if (pthread_create(&thr[i], NULL, &routine, NULL) != 0) 
-		{
-			perror("Failed to create thread\n");
-			return (1);
-		}
-		printf("Thread %d has started\n", i);
-	}//&thr[i] SAME AS thr + i
+	if (ft_handle_input_errors(argc, argv) != 0)
+		return (0);
 
-	 //might not have enough resources for thread, so need to error-check
-	//arg0 ptr to t1 var, hence &
-	//arg1 customisation. Passing NULL will use defaults. Andrei used defaults
-	//arg2 passes ft as argument, which is why you ref with &
-	//arg3 arg passed into "routine" Andrei passed a struct
-	for (i=0; i < 4; i++)
-	{
-		if (pthread_join(thr[i], NULL) != 0) {
-			return (2);
-		}
-		printf("Thread %d has finished execution\n", i);
-	}
-
-
-		/*very important!! We need to wait for pthread to finish execution. 
-		We can't have process finish and thread be unfinished. pthread_join makes it wait*/
-
-	
-		//arg0 struct, which holds info for thread
-		//arg1 ptr that gets result from that thread. routine is void*, so ==NULL here
-	pthread_mutex_destroy(&mutex);//every mutex_init requires a destroy
-	printf("Number of mails: %d\n", mails);
-	return (0);
+	t_vars *vars;
+	vars = malloc(sizeof(t_vars));
+	ft_init_vars(argc, argv, vars);
 }

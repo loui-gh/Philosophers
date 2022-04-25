@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 16:10:28 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/23 18:42:29 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/23 21:08:06 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int		ft_init_vars(int argc, char *argv[], t_vars *vars)
 	vars->time_to_die = ft_atoi(argv[2]);
 	vars->time_to_eat = ft_atoi(argv[3]);
 	vars->time_to_sleep = ft_atoi(argv[4]);
-	vars->table->forks_on_table = vars->number_of_philosophers;
+	vars->forks_on_table = vars->number_of_philosophers;
 	if (argc == 6)
 		vars->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
 	return (0);
