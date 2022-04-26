@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 21:02:52 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/26 12:14:59 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/26 22:09:26 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 #include <pthread.h>
 #include <time.h>
 
+/*MAIN ARGS:
+arg[1] nr_philos
+arg[2] time_die --length of time philo can go w/o eating
+arg[3] time_eat -- eating time, need to hold two forks for this one
+arg[4] time_sleep -- sleep occurs right after eating, first put down forks
+arg[5] (*optional) nr_times_eat -- if all philos have eaten at least X nr of times, simulation stops
+Otherwise sim stops when ONE philo dies
+*/
 //GOAL: create a program that simulates the behaviour of a philosopher eating and thinking hahaha
 //ATTEMPT #1: PASS THE ID AND STATUS OF PHILOSOPHERS AS A STRUCT
 //A philosopher is represented by a thread. Each philosopher has a unique id & status 
@@ -28,65 +36,18 @@
 //HERE: Create 10 threads, each taking a UNIQUE prime from the primes array above
 //TRANSLATION TO PHILOSOPHERS: Take each philo and assign her status randomly
 
-int mails = 0;
-
-void	ft_putstr(char *s)
-{
-	int i;
-	
-	i = 0;
-	while (s[i] != '\0')
-	{
-		write(1, &s[i], 1);
-	}
-}
-
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
-
-void	ft_putnbr(int num)
-{
-	if (num < 0)
-	{
-		ft_putchar('-');
-		num = -num;
-	}
-
-	if (num > 9)
-	{
-		ft_putnbr(num / 10);
-		ft_putnbr(num % 10);
-	}
-	else
-		ft_putchar(num + '0');//to convert into 
-}
-int	ft_write(int id)
-{
-	write(1, "#", 1);
-	ft_putnbr(id);
-	write(1, "\n", 1);
-	return (0);
-}
 
 void* routine(void *arg) 
 {
 	usleep(1);
 	t_table *table = (t_table *)arg;
-	int i;
-	i = 0;
+
+	//eat think sleep inside
+	//int a = table->philo->id;//this is the 
 	pthread_mutex_lock(table->mutex);
-		ft_write(table->philo->id++);//Why does this start at zero & why is it in order?
-    pthread_mutex_unlock(table->mutex);
-	//eat think sleep inside 
-	while(i < 10000000) 
-	{
-        pthread_mutex_lock(table->mutex);
-        mails++;
-        pthread_mutex_unlock(table->mutex);
-		i++;
-	}
+	//printf("from init philo %d\n", table->philo[i]->id);
+	ft_write(table->philo->id++);//Is it right if it's in order?
+	pthread_mutex_unlock(table->mutex);
 	return (0);
 }
 
@@ -94,6 +55,7 @@ void	ft_init_her(t_philo *philo, int i)
 {
  		philo[i].thread = malloc(sizeof(pthread_t));
 		philo[i].id = i+1;
+		printf("from init philo %d\n", philo[i].id);
 		philo[i].status = 0; //Philosopher status: 0 - thinking, 1 - eating, 2 - sleeping -- create a mutex lock for that
 
 }
@@ -105,27 +67,26 @@ int main(int argc, char* argv[])
 		return (0);
 
 	t_table table;
-	t_philo *philo;
+	//t_philo *philo_struct;
 
 	ft_init_table(argc, argv, &table);
 
 	table.mutex = malloc(sizeof(pthread_mutex_t));//source of orig erre??
-    pthread_mutex_init(table.mutex, NULL);//mutex is *ptr, so don't need ampersand
-
+	pthread_mutex_init(table.mutex, NULL);//mutex is *ptr, so don't need ampersand
 	table.philo = malloc(sizeof(t_philo) * table.number_of_philosophers);
-	philo = (t_philo *)malloc(sizeof(t_philo) * table.number_of_philosophers);//each philo is a struct
-	//philo array ^^
-	int i;
-	i = 0;
+	//philo_struct = (t_philo *)malloc(sizeof(t_philo) * table.number_of_philosophers);//each philo is a struct
+	//philo array ^^ DBL-UP
 
 // philo = NULL;
-   while ( i < table.number_of_philosophers) 
-   {
+	int i = 0;
+	while ( i < table.number_of_philosophers) 
+	{
 		// philo[i].thread = malloc(sizeof(pthread_t));
 		// table.philo[i].id = i+1;
 		// table.philo[i].status = 0; //Philosopher status: 0 - thinking, 1 - eating, 2 - sleeping -- create a mutex lock for that
-		ft_init_her(philo, i);
-		if (pthread_create(philo[i].thread, NULL, &routine, &table) != 0) 
+		ft_init_her(table.philo, i);
+		//if (pthread_create(philo_struct[i].thread, NULL, &routine, &table) != 0) //mistake is two dif structs
+		if (pthread_create(table.philo[i].thread, NULL, &routine, &table) != 0)
 		{
 			perror("Failed to create thread");
 			return 1; //th + i same as th[i]
@@ -134,15 +95,14 @@ int main(int argc, char* argv[])
 		i++;
 	}
 	i = 0;
-    while (i < table.number_of_philosophers)
+	while (i < table.number_of_philosophers)
 	{
-        if (pthread_join(*(philo[i].thread), NULL) != 0) //deref ptr here
+		if (pthread_join(*(table.philo[i].thread), NULL) != 0) //deref ptr here
 		{
-            return 2;
-        }
-        printf("Philo %d has finished eating\n", i+1);
+			return 2;
+		}
 		i++;
-    }
-    pthread_mutex_destroy(table.mutex);
-    return 0;
+	}
+	pthread_mutex_destroy(table.mutex);
+	return 0;
 }

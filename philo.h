@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 15:06:26 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/25 21:31:20 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/26 22:12:29 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,19 @@ typedef struct s_table //what's at the table
 
 
 //utils
-int		ft_isdigit(int c);
+
 int		ft_atoi(const char *str);
 size_t	ft_strlen(const char *str);
+void	ft_putstr(char *s);
+void	ft_putchar(char c);
+int		ft_write(int id);
+
+//error-handling
+int		ft_isdigit(int c);
 void	check_digits(char **argv);
 int		ft_handle_input_errors(int argc, char *argv[]);
+
+//philo_utils
 int		ft_init_table(int argc, char *argv[], t_table *table);
 
 #endif

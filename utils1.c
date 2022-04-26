@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 16:10:28 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/25 20:43:16 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/26 22:13:34 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ int	ft_handle_input_errors(int argc, char *argv[])
 		printf("Error: too few or too many args entered\n");
 		return (1);
 	}
-
-	return 0;
+	return (0);
 }
-int		ft_init_table(int argc, char *argv[], t_table *table)
+
+int	ft_init_table(int argc, char *argv[], t_table *table)
 {
 	table->number_of_philosophers = ft_atoi(argv[1]);
 	table->time_to_die = ft_atoi(argv[2]);
