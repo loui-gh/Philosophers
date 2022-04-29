@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/29 13:57:21 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/29 14:39:36 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@
 typedef struct s_vars
 {
 		pthread_mutex_t	mutex;
+		pthread_mutex_t	write;
 }		t_vars;
 
 typedef struct s_philo 
 {
-	int				id;
-	pthread_t 		thread; //make pthread a pointer, then it functions as a dynamic array in this instance
+	int			id;
+	pthread_t 	thread; //make pthread a pointer, then it functions as a dynamic array in this instance
+	t_vars		*vars;
 	//pthread_mutex_t	*mutex;
 }		t_philo;
 //pthread_mutex_t	mutex;//need to lock correct mutex!
