@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/29 14:39:36 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/29 21:43:36 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_vars
 typedef struct s_philo 
 {
 	int			id;
+	int			fork;
 	pthread_t 	thread; //make pthread a pointer, then it functions as a dynamic array in this instance
 	t_vars		*vars;
 	//pthread_mutex_t	*mutex;

@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 13:50:35 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/29 14:46:53 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/29 21:16:14 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	hello(int n)
 {
 	t_vars vars;
 	pthread_mutex_lock(&vars.write);
-	printf("Hello from thread %d\n", n);
+	printf("Philo %d created\n", n);
 	pthread_mutex_unlock(&vars.write);
 }
 

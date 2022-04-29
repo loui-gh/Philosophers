@@ -6,28 +6,37 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 13:35:49 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/29 14:47:46 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/29 21:45:59 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
 
 void	*ft_routine(void *arg)
 {
 	t_philo *philo;
 	t_vars	vars;
 	philo = (t_philo *)arg;
-	///philo->mutex = malloc(sizeof(pthread_mutex_t));
-	//usleep(3); --makes no diff to sloppy execution
-	//REMEMBER: This is not a process!!
-	/*only need to malloc ptrs in t_vars --according to B-dawg's code (Boris)*/
-	//BORIS: dt->mutex = malloc(sizeof(pthread_mutex_t) * (ft_atoi(argv[1])));
+	hello(philo->id);//id+1 is to the right
+	//but! if philo->id == nr philos, philo to your right is 1
 	
-	pthread_mutex_lock(&vars.mutex);
-	hello(philo->id);
+	if (philo->fork == 1 && philo[philo->id + 1]->fork == 1)
+	{
+		pthread_mutex_lock(&vars.mutex);
+		ft_write("pick up the fucking fork!\n");
+		philo->r_fork = 0;
+		philo->l_fork = 0;
+		philo[philo->id + 1].l_fork = 0;
+		philo[philo->id + 1].r_fork = 0;
+		
+	}
+	else
+		ft_write("no forks, no food, fucker\n");
 	pthread_mutex_unlock(&vars.mutex);
+	/*pick up forks*/
 	
-	
+
 	return(0);
 }
 
@@ -79,5 +88,5 @@ void	ft_init_philos(t_philo *philo, int i)
 {
 	//ptr[i]->thread = malloc(sizeof(pthread_t));
 	philo[i].id = i + 1;
-	//Philosopher status: 0 - thinking, 1 - eating, 2 - sleeping -- create a mutex lock for that
+	philo[i].fork = 1;
 }
