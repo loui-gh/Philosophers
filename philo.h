@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/30 21:31:41 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/30 23:44:24 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # define THINKING 0
 # define EATING 1
 # define SLEEPING 2
+# define TAKEN 0
+# define ON_THE_TABLE 2
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,7 +27,7 @@
 typedef struct s_vars
 {
 		int				nr_philos;
-		pthread_mutex_t	l_mutex;
+		pthread_mutex_t	eat_mutex;
 		pthread_mutex_t	write;
 		//pthread_mutex_t	*fork;
 		
@@ -35,6 +37,8 @@ typedef struct s_philo
 {
 	int			id;
 	int			index;
+	int			l_fork;//=2
+	int			r_fork;//=2 at init
 	struct s_philo	*l_philos;//+1
 	struct s_philo	*r_philos;
 	pthread_t 		thread;

@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 13:35:49 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/30 21:35:06 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/30 23:45:10 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,63 @@ void	hello(int id, int index)
 	t_vars vars;
 	pthread_mutex_lock(&vars.write);
 	printf("Hello from philosopher %d, index %d\n", id, index);
-	
 	pthread_mutex_unlock(&vars.write);
 }
 
 void	*ft_routine(void *arg)
 {
 	t_philo *philo;
-	//t_vars vars;
+	t_vars vars;
 	philo = (t_philo *)arg;
 	hello(philo->id, philo->index);
-	// pthread_mutex_lock(&vars.l_mutex);
-	// printf("Philo %d created, neighbour should be %d\n", philo->id, philo->l_philos->id);
-	// pthread_mutex_unlock(&vars.l_mutex);
+	pthread_mutex_lock(&vars.eat_mutex);
+	if (philo->l_fork == ON_THE_TABLE && philo->r_fork == ON_THE_TABLE)
+	{
+		pthread_mutex_lock(&vars.write);
+		printf("Philosopher %d takes the forks\n", philo->id);
+		pthread_mutex_unlock(&vars.write);
+		philo->l_fork = TAKEN;
+		philo->r_fork = TAKEN;
+		philo->r_philos->l_fork = TAKEN;
+		philo->l_philos->r_fork = TAKEN;
+		//sleep(vars.time_to_eat);
+		// pthread_mutex_lock(&vars.write);
+		// printf("Philosopher %d is sleeping\n", philo->id);
+		// pthread_mutex_unlock(&vars.write);
+		// sleep(vars.time_to_sleep);
+		// philo->l_fork = ON_THE_TABLE;
+		// philo->r_fork = ON_THE_TABLE;
+	}
+// 	if (philo->l_fork == ON_THE_TABLE && philo->r_fork == ON_THE_TABLE)
+// 	{
+// 		pthread_mutex_lock(&vars.write);
+// 		printf("Philosopher %d is eating\n", philo->id);
+// 		pthread_mutex_unlock(&vars.write);
+// 		sleep(vars.time_to_eat);
+// 		pthread_mutex_lock(&vars.write);
+// 		printf("Philosopher %d is sleeping\n", philo->id);
+// 		pthread_mutex_unlock(&vars.write);
+// 		pthread_mutex_unlock(&vars.eat_mutex);
+// 		pthread_mutex_lock(&vars.write);
+// 		printf("Philosopher %d is thinking\n", philo->id);
+// 		pthread_mutex_unlock(&vars.write);
+// 		pthread_mutex_lock(&vars.write);
+// 		printf("Philosopher %d is hungry\n", philo->id);
+// 		pthread_mutex_unlock(&vars.write);
+// 		pthread_mutex_lock(&vars.eat_mutex);
+// 	}
+// 	else
+// 	{
+// 		pthread_mutex_lock(&vars.write);
+// 		printf("Philosopher %d is waiting\n", philo->id);
+// 		pthread_mutex_unlock(&vars.write);
+// 		pthread_mutex_unlock(&vars.eat_mutex);
+// 		pthread_mutex_lock(&vars.write);
+// 		printf("Philosopher %d is thinking\n", philo->id);
+// 		pthread_mutex_unlock(&vars.write);
+// 		pthread_mutex_lock(&vars.eat_mutex);
+// 	}
+	pthread_mutex_unlock(&vars.eat_mutex);
 	
 	return(0);
 }
@@ -48,8 +92,8 @@ int	main(int argc, char *argv[])
 	vars.nr_philos = ft_atoi(argv[1]);
 	
 	//philo->vars->mutex = malloc(sizeof(pthread_mutex_t) * nr_philos);
-	pthread_mutex_init(&vars.l_mutex, NULL);
-	pthread_mutex_init(&vars.l_mutex, NULL);
+	pthread_mutex_init(&vars.write, NULL);
+	pthread_mutex_init(&vars.eat_mutex, NULL);
 
 
 	ft_init_philos(philo, vars.nr_philos);
@@ -76,7 +120,7 @@ int	main(int argc, char *argv[])
 	}
 
 	pthread_mutex_destroy(&vars.write);
-	pthread_mutex_destroy(&vars.l_mutex);
+	pthread_mutex_destroy(&vars.eat_mutex);
 	free(philo);
 	i = 0;
 
