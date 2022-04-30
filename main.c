@@ -6,60 +6,56 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 13:35:49 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/29 21:45:59 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/30 21:35:06 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	hello(int id, int index)
+{
+	t_vars vars;
+	pthread_mutex_lock(&vars.write);
+	printf("Hello from philosopher %d, index %d\n", id, index);
+	
+	pthread_mutex_unlock(&vars.write);
+}
 
 void	*ft_routine(void *arg)
 {
 	t_philo *philo;
-	t_vars	vars;
+	//t_vars vars;
 	philo = (t_philo *)arg;
-	hello(philo->id);//id+1 is to the right
-	//but! if philo->id == nr philos, philo to your right is 1
+	hello(philo->id, philo->index);
+	// pthread_mutex_lock(&vars.l_mutex);
+	// printf("Philo %d created, neighbour should be %d\n", philo->id, philo->l_philos->id);
+	// pthread_mutex_unlock(&vars.l_mutex);
 	
-	if (philo->fork == 1 && philo[philo->id + 1]->fork == 1)
-	{
-		pthread_mutex_lock(&vars.mutex);
-		ft_write("pick up the fucking fork!\n");
-		philo->r_fork = 0;
-		philo->l_fork = 0;
-		philo[philo->id + 1].l_fork = 0;
-		philo[philo->id + 1].r_fork = 0;
-		
-	}
-	else
-		ft_write("no forks, no food, fucker\n");
-	pthread_mutex_unlock(&vars.mutex);
-	/*pick up forks*/
-	
-
 	return(0);
 }
 
 int	main(int argc, char *argv[])
 {
-	int		nr_philos;
+	//int		nr_philos;
 	int		i;
 	t_philo	*philo;
-	t_vars	vars; //don't need to malloc vars or vars.mutex here
+	t_vars	vars; //don't need to malloc vars or vars.l_mutex here
 	
 	if (ft_handle_input_errors(argc, argv) != 0)
 		return (0);
-	nr_philos = ft_atoi(argv[1]);
-	philo = malloc(sizeof(t_philo) * nr_philos);
-	pthread_mutex_init(&vars.mutex, NULL);
-	pthread_mutex_init(&vars.write, NULL);
+	
+	philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
+	vars.nr_philos = ft_atoi(argv[1]);
+	
+	//philo->vars->mutex = malloc(sizeof(pthread_mutex_t) * nr_philos);
+	pthread_mutex_init(&vars.l_mutex, NULL);
+	pthread_mutex_init(&vars.l_mutex, NULL);
 
+
+	ft_init_philos(philo, vars.nr_philos);
 	i = 0;
-	while (i < nr_philos)
+	while (i < vars.nr_philos)
 	{
-		
-		ft_init_philos(philo, i);
-		//need a mutex_init for every philo?
 		if (pthread_create(&philo[i].thread, NULL, &ft_routine, &philo[i]) != 0) 
 		{
 			perror("Failed to create thread");
@@ -69,7 +65,7 @@ int	main(int argc, char *argv[])
 	}
 	
 	i = 0;
-	while (i < nr_philos)
+	while (i < vars.nr_philos)
 	{
 		if (pthread_join(philo[i].thread, NULL) != 0) 
 		{
@@ -78,15 +74,12 @@ int	main(int argc, char *argv[])
 		}
 		i++;
 	}
-	pthread_mutex_destroy(&vars.mutex);
+
 	pthread_mutex_destroy(&vars.write);
+	pthread_mutex_destroy(&vars.l_mutex);
+	free(philo);
+	i = 0;
+
 	
 	return (0);
-}
-
-void	ft_init_philos(t_philo *philo, int i)
-{
-	//ptr[i]->thread = malloc(sizeof(pthread_t));
-	philo[i].id = i + 1;
-	philo[i].fork = 1;
 }

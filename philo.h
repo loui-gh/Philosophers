@@ -6,12 +6,15 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/29 21:43:36 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/04/30 21:31:41 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
+# define THINKING 0
+# define EATING 1
+# define SLEEPING 2
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,19 +24,23 @@
 
 typedef struct s_vars
 {
-		pthread_mutex_t	mutex;
+		int				nr_philos;
+		pthread_mutex_t	l_mutex;
 		pthread_mutex_t	write;
+		//pthread_mutex_t	*fork;
+		
 }		t_vars;
 
 typedef struct s_philo 
 {
 	int			id;
-	int			fork;
-	pthread_t 	thread; //make pthread a pointer, then it functions as a dynamic array in this instance
+	int			index;
+	struct s_philo	*l_philos;//+1
+	struct s_philo	*r_philos;
+	pthread_t 		thread;
 	t_vars		*vars;
-	//pthread_mutex_t	*mutex;
 }		t_philo;
-//pthread_mutex_t	mutex;//need to lock correct mutex!
+
 
 //philos & threading
 void	ft_init_philos(t_philo *philo, int i);
@@ -50,7 +57,8 @@ int		ft_atoi(const char *str);
 size_t	ft_strlen(const char *str);
 
 //print fts
-void	hello(int n);
+//void	hello(int n, t_philo *philo); //can I point to specific philos within the routine ft? -- doesn't look like it
+
 void	ft_putnbr(long n);
 void	ft_write(char *msg);
 
