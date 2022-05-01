@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/04/30 23:44:24 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/01 15:26:10 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,12 @@
 
 typedef struct s_vars
 {
-		int				nr_philos;
-		pthread_mutex_t	eat_mutex;
-		pthread_mutex_t	write;
+		int					nr_philos;
+		long unsigned int	time_to_eat;//given in milliseconds*//
+		long unsigned int	time_to_sleep;//given in milliseconds*//
+		pthread_mutex_t		eat_mutex;
+		pthread_mutex_t		sleep_mutex;
+		pthread_mutex_t		write;
 		//pthread_mutex_t	*fork;
 		
 }		t_vars;
