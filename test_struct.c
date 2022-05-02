@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <pthread.h>
 #define ON_THE_TABLE 2
 
@@ -12,7 +13,7 @@ typedef struct s_vars
 		int					time_to_eat;
 		int					time_to_sleep;
 		int					meal_limit_per_philos;
-		// pthread_mutex_t		eat_mutex;
+		 pthread_mutex_t		eat_mutex;
 		pthread_mutex_t		write_mutex;
 		//pthread_mutex_t	*fork;
 		
@@ -46,9 +47,21 @@ void	ft_init_philos(t_philo *philo, t_vars *vars, int nr_philos);
 int		ft_atoi(const char *str);
 void	ft_init_vars(t_vars *vars, char *argv[]);
 
-void	*ft_routine()
+int mails = 0;
+pthread_mutex_t mutex;
+
+void	*ft_routine(void *arg)
 {
-	printf("Hello from thread\n");
+	t_philo *philo;
+	philo = (t_philo *)arg;
+	//t_vars	vars;
+	printf("Hello from thread %d\n", philo->id);
+	for (int i = 0; i < 10000000; i++) {
+		pthread_mutex_lock(&philo->vars->write_mutex);
+		mails++;
+		pthread_mutex_unlock(&philo->vars->write_mutex);
+	}
+	
 	return (0);
 }
 
@@ -68,12 +81,13 @@ int main(int argc, char* argv[])
 	ft_init_vars(&vars, argv);//here have successfully initialised 1 specific vars struct
 	ft_init_philos(philo, &vars, nr_philos);
 
+	pthread_mutex_init(&vars.write_mutex, NULL);
 	i = 0;
 	while (i < nr_philos)
 	{
-		if (pthread_create(&philo[i].thread, NULL, &ft_routine, NULL) != 0) 
+		if (pthread_create(&philo[i].thread, NULL, &ft_routine, &philo[i]) != 0) 
 		{
-			perror("Failed to create thread");
+			write(2, "Failed to create thread\n", 24);
 			return 1;
 		}
 		i++;
@@ -84,13 +98,13 @@ int main(int argc, char* argv[])
 	{
 		if (pthread_join(philo[i].thread, NULL) != 0) 
 		{
-			perror("Failed to create thread");
+			write(2, "Failed to create thread\n", 24);
 			return 1;
 		}
 		i++;
 	}
-	
-
+	printf("Number of mails: %d\n", mails);
+	pthread_mutex_destroy(&vars.write_mutex);
 	free(philo);
 	return (0);
 
