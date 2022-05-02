@@ -13,7 +13,7 @@ typedef struct s_vars
 		int					time_to_sleep;
 		int					meal_limit_per_philos;
 		// pthread_mutex_t		eat_mutex;
-		// pthread_mutex_t		write_mutex;
+		pthread_mutex_t		write_mutex;
 		//pthread_mutex_t	*fork;
 		
 }		t_vars;
@@ -33,28 +33,65 @@ typedef struct s_philo
 
 
 //void	*ft_routine(void *arg)
-//init both structs (all philos + table)
+/*create threads in a while-loop,
+build baby routine ft, 
+try to init mutexes in vars init ft.
+split up into Makefile, philo.h, etc.
+*/
+/*DONE*/
+/*init both structs (all philos + table)
+*/
 
 void	ft_init_philos(t_philo *philo, t_vars *vars, int nr_philos);
 int		ft_atoi(const char *str);
 void	ft_init_vars(t_vars *vars, char *argv[]);
 
+void	*ft_routine()
+{
+	printf("Hello from thread\n");
+	return (0);
+}
+
 int main(int argc, char* argv[])
 {
 	t_philo	*philo;
 	t_vars	vars;
-	int nr_philos;
+	int		nr_philos;
+	int		i;
 
 	argc++; //CHANGE LATER
 	nr_philos = ft_atoi(argv[1]);
-	ft_init_vars(&vars, argv);//here have successfully initialised 1 specific vars struct
-	philo = malloc(sizeof(t_philo) * nr_philos);
 	
+	//init structs
+	philo = malloc(sizeof(t_philo) * nr_philos);
+	//do I need to init all the mutexes here?
+	ft_init_vars(&vars, argv);//here have successfully initialised 1 specific vars struct
 	ft_init_philos(philo, &vars, nr_philos);
-	printf("nr_philos vars.nr_philos: %d\n", vars.nr_philos);
-	printf("philo->vars.time_to_die: %d\n", philo->vars->time_to_die);
 
+	i = 0;
+	while (i < nr_philos)
+	{
+		if (pthread_create(&philo[i].thread, NULL, &ft_routine, NULL) != 0) 
+		{
+			perror("Failed to create thread");
+			return 1;
+		}
+		i++;
+	}
 
+	i = 0;
+	while (i < nr_philos)
+	{
+		if (pthread_join(philo[i].thread, NULL) != 0) 
+		{
+			perror("Failed to create thread");
+			return 1;
+		}
+		i++;
+	}
+	
+
+	free(philo);
 	return (0);
 
 }
