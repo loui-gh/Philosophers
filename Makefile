@@ -6,7 +6,7 @@
 #    By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/29 09:10:14 by Loui :)           #+#    #+#              #
-#    Updated: 2022/04/30 08:37:59 by Loui :)          ###   ########.fr        #
+#    Updated: 2022/05/01 21:07:15 by Loui :)          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@ NAME		=	philo
 
 CC			=	gcc
 
-CFLAGS		=	-Wall -Wextra -Werror -pthread -ggdb3 ##This one fucks up my execution :) -fsanitize=thread
-
+CFLAGS		=	-g -Wall -Wextra -Werror -pthread -ggdb3 ##This one fucks up my execution :) -fsanitize=thread
+#-g to help debugging
 SRC			=	main.c input_error.c print.c utils1.c modify_philos.c #main.c utils1.c 
 
 OBJ			=	${SRC:.c=.o}

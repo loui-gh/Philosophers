@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/01 15:26:10 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/02 08:47:05 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_vars
 		int					nr_philos;
 		long unsigned int	time_to_eat;//given in milliseconds*//
 		long unsigned int	time_to_sleep;//given in milliseconds*//
+		int					meal_limit;
 		pthread_mutex_t		eat_mutex;
 		pthread_mutex_t		sleep_mutex;
 		pthread_mutex_t		write;
@@ -42,6 +43,7 @@ typedef struct s_philo
 	int			index;
 	int			l_fork;//=2
 	int			r_fork;//=2 at init
+	int			nr_meals;
 	struct s_philo	*l_philos;//+1
 	struct s_philo	*r_philos;
 	pthread_t 		thread;
@@ -50,7 +52,7 @@ typedef struct s_philo
 
 
 //philos & threading
-void	ft_init_philos(t_philo *philo, int i);
+void	ft_init_philos(t_philo *philo, t_vars *vars, int nr_philos);
 void	*ft_routine(void *arg);
 
 
