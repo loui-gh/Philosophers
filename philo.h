@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/03 22:56:40 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/04 19:37:41 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ typedef struct s_vars
 		int					time_to_eat;
 		int					time_to_sleep;
 		int					meal_limit;
+		
 		pthread_mutex_t		print_mutex;
-		pthread_mutex_t		*forks;
+		pthread_mutex_t		read_mutex;
 }		t_vars;
 
 typedef struct s_philo 
@@ -37,14 +38,14 @@ typedef struct s_philo
 	int				id;
 	int				index;
 	int				l_fork;//=2
-	int				r_fork;//=2 at init
+	//int				r_fork;//=2 at init
 	int				nr_meals;
 	struct s_philo	*l_philos;//+1
 	struct s_philo	*r_philos;
 	int				*ptr_r_fork;
 	pthread_t		thread;
 	pthread_mutex_t	l_fork_mutex;
-	pthread_mutex_t	r_fork_mutex;
+	pthread_mutex_t	*ptr_mutex;
 	t_vars			*vars;
 }			t_philo;
 

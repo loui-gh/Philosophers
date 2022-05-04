@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 08:33:25 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/03 23:04:58 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/04 19:50:00 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	ft_init_vars(t_vars *vars, char *argv[])
 	else
 		vars->meal_limit = -1;
 	pthread_mutex_init(&vars->print_mutex, NULL);
-	//pthread_mutex_init(vars->forks, NULL);
+	pthread_mutex_init(&vars->read_mutex, NULL);
+
 }
 
 void	ft_init_philos(t_philo *philo, t_vars *vars, int nr_philos)
@@ -42,7 +43,6 @@ void	ft_init_philos(t_philo *philo, t_vars *vars, int nr_philos)
 		//error could be not identifying right lady
 		//philo[i].nr_meals = vars->meal_limit;
 		pthread_mutex_init(&philo[i].l_fork_mutex, NULL);
-		pthread_mutex_init(&philo[i].r_fork_mutex, NULL);
 		i++;
 	}
 	//TEST
