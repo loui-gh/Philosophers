@@ -6,7 +6,7 @@
 #    By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/29 09:10:14 by Loui :)           #+#    #+#              #
-#    Updated: 2022/05/04 15:15:51 by Loui :)          ###   ########.fr        #
+#    Updated: 2022/05/04 20:52:02 by Loui :)          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC			=	gcc
 
 CFLAGS		=	-Wall -Wextra -Werror -pthread -ggdb3 -fsanitize=thread ##This one fucks up my execution :) 
 
-SRC			=	try2.c utils.c init_structs.c input_error.c #utils1.c #main.c utils1.c 
+SRC			=	try2.c utils.c init_structs.c input_error.c take_up_forks.c
 
 OBJ			=	${SRC:.c=.o}
 
