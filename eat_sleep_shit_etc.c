@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 09:25:00 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/06 11:27:03 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/06 14:50:21 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	ft_eat(t_philo *philo)
 		{
 			
 			pthread_mutex_lock(&philo->vars->print_mutex);
-			printf("%07li philophilo %d is eating\n", current_time(philo), philo->id);
+			philo->start_eat_time = current_time(philo);
+			printf("%07li philophilo %d is eating\n", philo->start_eat_time, philo->id);
 			pthread_mutex_unlock(&philo->vars->print_mutex);
 			usleep(philo->vars->time_to_eat * 1000);
 			//check_meals
@@ -33,13 +34,25 @@ void	ft_eat(t_philo *philo)
 void	ft_sleep(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->vars->print_mutex);
-	printf("%07li philophilo %d is sleeping\n", current_time(philo), philo->id);
+	printf("%07li philo %d is sleeping\n", current_time(philo), philo->id);
 	pthread_mutex_unlock(&philo->vars->print_mutex);
 	usleep(philo->vars->time_to_sleep * 1000);
+		//do i need to mutex this?
+	if (grim_reaper(philo) == DEAD)
+	{
+		ft_free(philo, philo->vars->nr_philos);
+		exit(EXIT_FAILURE);
+	}
 }
 void	ft_think(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->vars->print_mutex);
 	printf("philo %d is thinking\n", philo->id);
 	pthread_mutex_unlock(&philo->vars->print_mutex);
+	//do i need to mutex this?
+	if (grim_reaper(philo) == DEAD)
+	{
+		ft_free(philo, philo->vars->nr_philos);
+		exit(EXIT_FAILURE);
+	}
 }

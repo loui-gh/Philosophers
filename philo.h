@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/06 12:41:48 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/06 14:46:11 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define EATING 1
 # define SLEEPING 2
 # define THINKING 3
+# define DEAD 4
+# define ALIVE 5
 
 typedef struct s_vars
 {
@@ -46,6 +48,7 @@ typedef struct s_philo
 	int				forks_in_hand;
 	int				nr_meals;
 	int				philo_state;
+	long			start_eat_time;
 	struct s_philo	*l_philos;//+1
 	struct s_philo	*r_philos;
 	int				*ptr_r_fork;
@@ -87,4 +90,6 @@ void	ft_sleep(t_philo *philo);
 //time
 long	get_time(void);
 long	current_time(t_philo *philo);
+//DEATH
+int		grim_reaper(t_philo *philo);
 #endif

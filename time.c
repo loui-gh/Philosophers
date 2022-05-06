@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 10:02:32 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/06 12:35:38 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/06 14:45:52 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,3 +34,14 @@ printf("%07i Philosopher %d is sleeping.\n", \
 */
 
 
+int	grim_reaper(t_philo *philo)
+{
+	if ((current_time(philo) - philo->start_eat_time) > philo->vars->time_to_die)
+		return (DEAD);
+	else
+		return (ALIVE);
+}
+
+/*if grim_reaper(philo[i] == DEATH)
+	kill programme
+*/
