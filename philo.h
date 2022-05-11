@@ -3,60 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: kmeixner <konstantin.meixner@freenet.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/06 14:46:11 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/10 15:14:17 by kmeixner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <sys/time.h>
 
 # define TAKEN 300
 # define ON_THE_TABLE 100
-# define EATING 1
-# define SLEEPING 2
-# define THINKING 3
+
 # define DEAD 4
 # define ALIVE 5
+# define HERE 0
 
 typedef struct s_vars
 {
-		int					nr_philos;
-		int					time_to_die;
-		int					time_to_eat;
-		int					time_to_sleep;
-		int					meal_limit;
-		long				start_time;
-		int					*meals;
-		pthread_mutex_t		mutex;
-		pthread_mutex_t		print_mutex;
+	int					nr_philos;
+	int					time_to_die;
+	int					time_to_eat;
+	int					time_to_sleep;
+	int					meal_limit;
+	long				start_time;
+	int					grim_reaper;
+	pthread_mutex_t		grim_reaper_mutex;
+	pthread_mutex_t		print_mutex;
 }		t_vars;
 
-typedef struct s_philo 
+typedef struct s_philo
 {
 	int				id;
-	int				index;
 	int				l_fork;
-	int				forks_in_hand;
 	int				nr_meals;
-	int				philo_state;
 	long			start_eat_time;
-	struct s_philo	*l_philos;//+1
+	struct s_philo	*l_philos;
 	struct s_philo	*r_philos;
-	int				*ptr_r_fork;
 	pthread_t		thread;
 	pthread_mutex_t	l_fork_mutex;
-	pthread_mutex_t	nr_forks_mutex;
-	pthread_mutex_t	nr_meals_mutex;
 	pthread_mutex_t	*ptr_mutex;
+	int				d_o_a;
+	pthread_mutex_t	doa_mutex;
+	int				forks_in_hand;
+	pthread_mutex_t	nr_forks_mutex;
+	pthread_mutex_t	eat_time_mutex;
+	pthread_mutex_t	nr_meals_mutex;
 	t_vars			*vars;
 }			t_philo;
 
@@ -64,13 +63,20 @@ typedef struct s_philo
 size_t	ft_strlen(const char *str);
 int		ft_atoi(const char *str);
 void	ft_putnbr(int c);
+void	ft_write(char *msg);
+void	philo_print(int id, long timestamp, int msg_categorie, t_philo *philo);
+//temp utils
+int		ft_write_id_status(int id, int status);
 
 //input errors
 int		ft_handle_input_errors(int argc, char *argv[]);
 
-//init structs
+//init structs n' threads
 void	ft_init_vars(t_vars *vars, char *argv[]);
+void	ft_init_r_fork_mutex(t_philo *philo);
 void	ft_init_philos(t_philo *philo, t_vars *vars, int nr_philos);
+int		ft_create_threads(t_philo *philo);
+void	*ft_routine(void *arg);
 
 //free structs + threads
 void	ft_free(t_philo *philo, int nr_philos);
@@ -89,7 +95,13 @@ void	ft_sleep(t_philo *philo);
 
 //time
 long	get_time(void);
+void	ft_wait(int nr_microseconds);
 long	current_time(t_philo *philo);
+void	ft_usleep(int duration, t_philo *philo);
 //DEATH
-int		grim_reaper(t_philo *philo);
+int		ft_survival_check(t_philo *philo);
+void	kill_them_all(t_philo *philo);
+void	one_guy(t_philo *philo); // <-- for if one philo only
+void	ft_check_meals(t_philo *philo);
+
 #endif
