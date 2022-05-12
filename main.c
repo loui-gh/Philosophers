@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 14:10:26 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/10 22:17:32 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/12 14:43:18 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,18 @@
 void	*ft_routine(void *arg)
 {
 	t_philo	*philo;
-	int		doa;
-
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->doa_mutex);
-	doa = philo->d_o_a;
-	pthread_mutex_unlock(&philo->doa_mutex);
-	while (1 && doa == ALIVE)
+
+	while (1)
 	{
+		
 		if (ft_survival_check(philo) == 1)
 			break ;
 		ft_pick_up_left_fork(philo);
 		ft_pick_up_right_fork(philo);
 		ft_eat(philo);
 	}
+
 	return (0);
 }
 
@@ -43,7 +41,7 @@ void	one_guy(t_philo *philo)
 {
 	ft_pick_up_left_fork(philo);
 	ft_wait(philo->vars->time_to_die);
-	philo->d_o_a = DEAD;
+	//philo->d_o_a = DEAD;
 	printf("%07li philo 1 died\n", current_time(philo));
 }
 

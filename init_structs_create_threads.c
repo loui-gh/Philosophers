@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 08:33:25 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/11 13:40:27 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/12 00:13:57 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ void	ft_init_vars(t_vars *vars, char *argv[])
 	vars->time_to_die = ft_atoi(argv[2]);
 	vars->time_to_eat = ft_atoi(argv[3]);
 	vars->time_to_sleep = ft_atoi(argv[4]);
+	vars->grim_reaper = 2;
 	if (argv[5])
 		vars->meal_limit = ft_atoi(argv[5]);
 	else
 		vars->meal_limit = -1;
 	vars->start_time = get_time();
-	vars->grim_reaper = 1;
+	pthread_mutex_init(&vars->grim_mutex, NULL);
 	pthread_mutex_init(&vars->print_mutex, NULL);
-	pthread_mutex_init(&vars->grim_reaper_mutex, NULL);
 }
 
 void	ft_init_r_fork_mutex(t_philo *philo)
@@ -55,12 +55,12 @@ void	ft_init_philos(t_philo *philo, t_vars *vars, int nr_philos)
 		philo[i].forks_in_hand = 0;
 		philo[i].vars->meal_limit = vars->meal_limit;
 		philo[i].start_eat_time = 0;
-		philo[i].d_o_a = ALIVE;
+
 		pthread_mutex_init(&philo[i].l_fork_mutex, NULL);
 		pthread_mutex_init(&philo[i].nr_forks_mutex, NULL);
 		pthread_mutex_init(&philo[i].nr_meals_mutex, NULL);
 		pthread_mutex_init(&philo[i].eat_time_mutex, NULL);
-		pthread_mutex_init(&philo[i].doa_mutex, NULL);
+
 		i++;
 	}
 	ft_init_r_fork_mutex(philo);

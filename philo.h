@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmeixner <konstantin.meixner@freenet.de    +#+  +:+       +#+        */
+/*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 09:12:34 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/10 15:14:17 by kmeixner         ###   ########.fr       */
+/*   Updated: 2022/05/12 14:41:17 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 
 # define TAKEN 300
 # define ON_THE_TABLE 100
-
-# define DEAD 4
-# define ALIVE 5
 # define HERE 0
 
 typedef struct s_vars
@@ -35,7 +32,7 @@ typedef struct s_vars
 	int					meal_limit;
 	long				start_time;
 	int					grim_reaper;
-	pthread_mutex_t		grim_reaper_mutex;
+	pthread_mutex_t		grim_mutex;
 	pthread_mutex_t		print_mutex;
 }		t_vars;
 
@@ -50,8 +47,6 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	l_fork_mutex;
 	pthread_mutex_t	*ptr_mutex;
-	int				d_o_a;
-	pthread_mutex_t	doa_mutex;
 	int				forks_in_hand;
 	pthread_mutex_t	nr_forks_mutex;
 	pthread_mutex_t	eat_time_mutex;
@@ -100,7 +95,6 @@ long	current_time(t_philo *philo);
 void	ft_usleep(int duration, t_philo *philo);
 //DEATH
 int		ft_survival_check(t_philo *philo);
-void	kill_them_all(t_philo *philo);
 void	one_guy(t_philo *philo); // <-- for if one philo only
 void	ft_check_meals(t_philo *philo);
 

@@ -6,7 +6,7 @@
 /*   By: Loui :) <loflavel@students.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/29 13:48:03 by Loui :)           #+#    #+#             */
-/*   Updated: 2022/05/11 00:04:58 by Loui :)          ###   ########.fr       */
+/*   Updated: 2022/05/12 14:43:41 by Loui :)          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,39 +48,6 @@ int	ft_atoi(const char *str)
 	return (res * minus);
 }
 
-/* 
-EAT 1
-SLEEP 2
-THINK 3
-DEATH 4
-*/
-void	philo_print(int id, long timestamp, int msg_categorie, t_philo *philo)
-{
-	int	death;
-
-	pthread_mutex_lock(&philo->vars->grim_reaper_mutex);
-	death = philo->vars->grim_reaper;
-	pthread_mutex_unlock(&philo->vars->grim_reaper_mutex);
-	if (msg_categorie == 1 && death != HERE)
-	{
-		pthread_mutex_lock(&philo->vars->print_mutex);
-		printf("%07li philo %d is eating\n", timestamp, id);
-		pthread_mutex_unlock(&philo->vars->print_mutex);
-	}
-	if (msg_categorie == 2 && death != HERE)
-	{
-		pthread_mutex_lock(&philo->vars->print_mutex);
-		printf("%07li philo %d is sleeping\n", timestamp, id);
-		pthread_mutex_unlock(&philo->vars->print_mutex);
-	}
-	if (msg_categorie == 3 && death != HERE)
-	{
-		pthread_mutex_lock(&philo->vars->print_mutex);
-		printf("%07li philo %d is thinking\n", timestamp, id);
-		pthread_mutex_unlock(&philo->vars->print_mutex);
-	}
-}
-
 void	ft_write(char *msg)
 {
 	int	i;
@@ -105,10 +72,11 @@ void	ft_free(t_philo *philo, int nr_philos)
 		pthread_mutex_destroy(&philo[j].nr_forks_mutex);
 		pthread_mutex_destroy(&philo[j].nr_meals_mutex);
 		pthread_mutex_destroy(&philo[j].eat_time_mutex);
-		pthread_mutex_destroy(&philo[j].doa_mutex);
 		j++;
 	}
 	pthread_mutex_destroy(&philo->vars->print_mutex);
-	pthread_mutex_destroy(&philo->vars->grim_reaper_mutex);
+	pthread_mutex_destroy(&philo->vars->grim_mutex);
+
+	
 	free(philo);
 }
